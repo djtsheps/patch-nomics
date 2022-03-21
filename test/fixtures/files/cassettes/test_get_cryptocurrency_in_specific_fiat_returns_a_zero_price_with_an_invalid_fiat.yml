@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.nomics.com/v1/currencies/ticker?convert=InvalidFiat&ids=BNB&key=<api_key>&per-page=100
+    body:
+      encoding: UTF-8
+      string: ''
+    headers:
+      Connection:
+      - close
+      Host:
+      - api.nomics.com
+      User-Agent:
+      - http.rb/5.0.4
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - Cowboy
+      Connection:
+      - close
+      Cache-Control:
+      - public, max-age=10, stale-while-revalidate=20, stale-if-error=20
+      Content-Type:
+      - application/json; charset=utf-8
+      Vary:
+      - Accept-Encoding
+      X-Pagination-Total-Items:
+      - '1'
+      Date:
+      - Mon, 21 Mar 2022 15:22:25 GMT
+      Content-Length:
+      - '608'
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: UTF-8
+      string: '[{"id":"BNB","currency":"BNB","symbol":"BNB","name":"Binance Coin","logo_url":"https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/bnb.svg","status":"active","platform_currency":"BNB","price":"0.00000000","price_date":"2022-03-21T00:00:00Z","price_timestamp":"2022-03-21T15:22:00Z","circulating_supply":"168137036","max_supply":"168137036","market_cap_dominance":"NaN","num_exchanges":"193","num_pairs":"19487","num_pairs_unmapped":"898491","first_candle":"2017-07-14T00:00:00Z","first_trade":"2017-07-14T00:00:00Z","first_order_book":"2018-08-29T00:00:00Z","rank":"10","rank_delta":"0"}]
+
+        '
+  recorded_at: Mon, 21 Mar 2022 15:22:25 GMT
+recorded_with: VCR 6.1.0

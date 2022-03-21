@@ -23,10 +23,34 @@ class Patch::TestNomics < Minitest::Test
     end
   end
 
+  def test_get_cryptocurrencies_with_specific_values_returns_empty_results_with_invalid_tickers
+    VCR.use_cassette("test_get_cryptocurrencies_with_specific_values_returns_empty_results_with_invalid_tickers") do
+      response = Patch::Nomics.get_cryptocurrencies_with_specific_values(tickers: %w[AAETH BBBTC], values: %w[id name])
+      assert_equal(response.results, [])
+      assert response.success
+    end
+  end
+
   def test_get_cryptocurrency_in_specific_fiat_retrieves_a_specific_cryptocurrency_to_specific_fiat
     VCR.use_cassette("test_get_cryptocurrency_in_specific_fiat_retrieves_a_specific_cryptocurrency_to_specific_fiat") do
       response = Patch::Nomics.get_cryptocurrency_in_specific_fiat(ticker: "BTC", fiat: "ZAR")
       assert_equal response.results, JSON.parse(File.read("test/fixtures/files/btc_ticker.json"))
+      assert response.success
+    end
+  end
+
+  def test_get_cryptocurrency_in_specific_fiat_returns_a_zero_price_with_an_invalid_fiat
+    VCR.use_cassette("test_get_cryptocurrency_in_specific_fiat_returns_a_zero_price_with_an_invalid_fiat") do
+      response = Patch::Nomics.get_cryptocurrency_in_specific_fiat(ticker: "BNB", fiat: "InvalidFiat")
+      assert_equal response.results['price'], '0.00000000'
+      assert response.success
+    end
+  end
+
+  def test_get_cryptocurrency_in_specific_fiat_returns_an_empty_object_given_an_invalid_ticker
+    VCR.use_cassette("test_get_cryptocurrency_in_specific_fiat_returns_an_empty_object_given_an_invalid_ticker") do
+      response = Patch::Nomics.get_cryptocurrency_in_specific_fiat(ticker: "InValidTicker", fiat: "USD")
+      assert_equal response.results, {}
       assert response.success
     end
   end
