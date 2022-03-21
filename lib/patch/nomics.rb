@@ -13,37 +13,19 @@ module Patch
     class Error < StandardError; end
 
     def self.get_cryptocurrencies(tickers:)
-      Patch::Nomics::Currencies.tickers(ids: tickers.join(","))
+      Patch::Nomics::Currencies.new.get_cryptocurrencies(tickers: tickers)
     end
 
     def self.get_cryptocurrencies_with_specific_values(tickers:, values:)
-      tickers_data = Patch::Nomics::Currencies.tickers(ids: tickers.join(","))
-      return tickers_data unless tickers_data[:success]
-
-      tickers_data[:results].map! { _1.slice(*values) }
-      tickers_data
+      Patch::Nomics::Currencies.new.get_cryptocurrencies_with_specific_values(tickers: tickers, values: values)
     end
 
     def self.get_cryptocurrency_in_specific_fiat(ticker:, fiat:)
-      tickers_data = Patch::Nomics::Currencies.tickers(ids: ticker, convert: fiat)
-      return tickers_data unless tickers_data[:success]
-
-      tickers_data[:results] = tickers_data[:results].first || {}
-      tickers_data
+      Patch::Nomics::Currencies.new.get_cryptocurrency_in_specific_fiat(ticker: ticker, fiat: fiat)
     end
 
     def self.calculate_cryptocurrency_price(from_ticker:, to_ticker:)
-      tickers_data = Patch::Nomics::Currencies.tickers(ids: [from_ticker, to_ticker].join(","), convert: "USD")
-      return tickers_data unless tickers_data[:success]
-
-      from_ticker_data = tickers_data[:results].find { _1["currency"] == from_ticker }
-      to_ticker_data = tickers_data[:results].find { _1["currency"] == to_ticker }
-
-      relation_to_the_dollar = to_ticker_data["price"].to_f / from_ticker_data["price"].to_f
-
-      tickers_data[:results] =
-        { "price" => "1#{to_ticker_data["currency"]} == #{from_ticker_data["currency"]}#{relation_to_the_dollar}" }
-      tickers_data
+      Patch::Nomics::Currencies.new.calculate_cryptocurrency_price(from_ticker: from_ticker, to_ticker: to_ticker)
     end
   end
 end

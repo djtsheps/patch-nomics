@@ -2,9 +2,7 @@
 
 module Patch
   module Nomics
-    module Base
-      extend self
-
+    class Base
       private
 
       def base_url
@@ -18,12 +16,12 @@ module Patch
       def fetch_data(url)
         response = HTTP.get(url)
         if response.code == 200
-          { success: true, results: JSON.parse(response.body.to_s) }
+          OpenStruct.new(success: true, results: JSON.parse(response.body.to_s))
         else
-          { success: false, error:  response.body.to_s }
+          OpenStruct.new(success: false, error: response.body.to_s)
         end
       rescue StandardError => e
-        { success: false, error: e.to_s }
+        OpenStruct.new(success: false, error: e.to_s)
       end
     end
   end
