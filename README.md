@@ -28,9 +28,11 @@ NOMICS_BASE_URL=https://api.nomics.com/v1/
 NOMICS_API_KEY=YOUR_API_KEY_HERE
 ```
 
+Retrieve a list of cryptocurrencies given set of tickers (symbols)
+
 ``` ruby
-# Retrieve a list of cryptocurrencies given set of tickers (symbols)
 Patch::Nomics.get_cryptocurrencies(tickers: ['BTC', 'XRP', 'ETH'])
+
 
 irb(main):011:0>  Patch::Nomics.get_cryptocurrencies(tickers: ['BTC', 'XRP', 'ETH'])
 =>
@@ -226,16 +228,24 @@ irb(main):011:0>  Patch::Nomics.get_cryptocurrencies(tickers: ['BTC', 'XRP', 'ET
       "market_cap_change"=>"-1552438800.10",
       "market_cap_change_pct"=>"-0.0380"}}]}
 irb(main):012:0>
+```
 
-# Retrieve a list specific cryptocurrencies and specific values based on the ticker and any other dynamic params
+Retrieve a list specific cryptocurrencies and specific values based on the ticker and any other dynamic params
+
+``` ruby
 Patch::Nomics.get_cryptocurrencies_with_specific_values(tickers: ['ETH', 'BTC'], values: ['id', 'name'])
+
 
 irb(main):009:0> Patch::Nomics.get_cryptocurrencies_with_specific_values(tickers: ['ETH', 'BTC'], values: ['id', 'name'])
 => {:success=>true, :results=>[{"id"=>"BTC", "name"=>"Bitcoin"}, {"id"=>"ETH", "name"=>"Ethereum"}]}
 irb(main):010:0>
+```
 
-# Retrieve a specific cryptocurrency to specific fiat. Ie: BTC in ZAR or ETH in USD
+Retrieve a specific cryptocurrency to specific fiat. Ie: BTC in ZAR or ETH in USD
+
+``` ruby
 Patch::Nomics.get_cryptocurrency_in_specific_fiat(ticker: 'BTC', fiat: 'ZAR')
+
 
 irb(main):010:0>  Patch::Nomics.get_cryptocurrency_in_specific_fiat(ticker: 'BTC', fiat: 'ZAR')
 =>
@@ -305,8 +315,11 @@ irb(main):010:0>  Patch::Nomics.get_cryptocurrency_in_specific_fiat(ticker: 'BTC
      "market_cap_change"=>"-2214216345356.12",
      "market_cap_change_pct"=>"-0.1585"}}}
 irb(main):011:0>
+```
 
-# Calculate the price of one cryptocurrency from another, in relation to their dollar value
+Calculate the price of one cryptocurrency from another, in relation to their dollar value
+
+``` ruby
 Patch::Nomics.calculate_cryptocurrency_price(from_ticker: 'BTC', to_ticker: 'ETH')
 
 irb(main):006:0> Patch::Nomics.calculate_cryptocurrency_price(from_ticker: 'BTC', to_ticker: 'ETH')
