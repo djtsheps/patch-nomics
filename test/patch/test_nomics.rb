@@ -15,6 +15,18 @@ class Patch::TestNomics < Minitest::Test
     end
   end
 
+  def test_get_cryptocurrencies_should_not_allow_more_than_100_tickers
+    response = Patch::Nomics.get_cryptocurrencies(tickers: ('BTC,XRP,ETH,'*34).split(','))
+    refute response.success
+    assert_equal response.error, 'tickers cant exceed 100 (102)'
+  end
+
+  def test_get_cryptocurrencies_with_specific_values_should_not_allow_more_than_100_tickers
+    response = Patch::Nomics.get_cryptocurrencies_with_specific_values(tickers: ('BTC,XRP,ETH,BNB,'*30).split(','), values: %w[id name])
+    refute response.success
+    assert_equal response.error, 'tickers cant exceed 100 (120)'
+  end
+
   def test_get_cryptocurrencies_with_specific_values
     VCR.use_cassette("test_get_cryptocurrencies_with_specific_values") do
       response = Patch::Nomics.get_cryptocurrencies_with_specific_values(tickers: %w[ETH BTC], values: %w[id name])
@@ -60,6 +72,22 @@ class Patch::TestNomics < Minitest::Test
       response = Patch::Nomics.calculate_cryptocurrency_price(from_ticker: "BTC", to_ticker: "ETH")
       assert_equal(response.results, { "price" => "1ETH == BTC0.07065948742085743" })
       assert response.success
+    end
+  end
+
+  def test_calculate_cryptocurrency_price_should_return_error_with_invalid_from_ticker
+    VCR.use_cassette("test_calculate_cryptocurrency_price_should_return_error_with_invalid_from_ticker") do
+      response = Patch::Nomics.calculate_cryptocurrency_price(from_ticker: "BTCInvalid", to_ticker: "ETH")
+      refute response.success
+      assert_equal response.error, 'invalid ticker(s) (BTCInvalid/ETH)'
+    end
+  end
+
+  def test_calculate_cryptocurrency_price_should_return_error_with_invalid_to_ticker
+    VCR.use_cassette("test_calculate_cryptocurrency_price_should_return_error_with_invalid_to_ticker") do
+      response = Patch::Nomics.calculate_cryptocurrency_price(from_ticker: "BTC", to_ticker: "ETHinvalid")
+      refute response.success
+      assert_equal response.error, 'invalid ticker(s) (BTC/ETHinvalid)'
     end
   end
 end
