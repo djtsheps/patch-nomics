@@ -24,6 +24,7 @@ Or install it yourself as:
 Add the following configuration to your `.env` file in the root of your project (see .env.example):
 
 ```shell
+# Get your API_KEY from https://p.nomics.com/cryptocurrency-bitcoin-api
 NOMICS_BASE_URL=https://api.nomics.com/v1/
 NOMICS_API_KEY=YOUR_API_KEY_HERE
 ```
